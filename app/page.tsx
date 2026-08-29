@@ -8,7 +8,16 @@ import { Sparkles } from "lucide-react";
 export const revalidate = 0; // Ensures fresh database data on load
 
 export default async function HomePage() {
-  const [events, isAdmin] = await Promise.all([getAllEvents(), getIsAdmin()]);
+  const [rawEvents, isAdmin] = await Promise.all([
+    getAllEvents(),
+    getIsAdmin(),
+  ]);
+
+  const events = rawEvents.map((event) => ({
+    ...event,
+    galleryUrls: event.galleryUrls ?? [],
+    tags: event.tags ?? [],
+  }));
 
   return (
     <div className="min-h-screen bg-cream text-ink">
@@ -39,7 +48,8 @@ export default async function HomePage() {
             Upcoming Events & Gatherings
           </h1>
           <p className="text-ink/70 text-sm sm:text-base max-w-2xl mx-auto sm:mx-0 mt-3">
-            Explore community pop-ups, conventions, and gatherings with live photos and location guides.
+            Explore community pop-ups, conventions, and gatherings with live
+            photos and location guides.
           </p>
         </div>
 

@@ -19,6 +19,13 @@ export default async function EventDetailPage({
     notFound();
   }
 
+  // Fallback null to empty arrays so TypeScript is happy (・w・)ゞ
+  const formattedEvent = {
+    ...event,
+    galleryUrls: event.galleryUrls ?? [],
+    tags: event.tags ?? [],
+  };
+
   const gallery =
     event.galleryUrls && event.galleryUrls.length > 0
       ? event.galleryUrls
@@ -50,7 +57,7 @@ export default async function EventDetailPage({
           </Link>
 
           <div className="flex items-center gap-3">
-            {isAdmin && <EventDetailAdminBar event={event} />}
+            {isAdmin && <EventDetailAdminBar event={formattedEvent} />}
             <div className="hidden sm:flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-ink" />
               <span className="text-xl">InfoEvent</span>

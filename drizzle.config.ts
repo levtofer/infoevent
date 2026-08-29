@@ -6,7 +6,7 @@ dotenv.config({ path: ".env.local" });
 export default defineConfig({
   schema: "./db/schema.ts",
   out: "./drizzle",
-  dialect: "sqlite", // 👈 This alone tells Drizzle it's SQLite-compatible!
+  dialect: "turso", // 👈 Change "sqlite" to "turso" to allow authToken!
   dbCredentials: {
     url: process.env.TURSO_DATABASE_URL!,
     authToken: process.env.TURSO_AUTH_TOKEN,
