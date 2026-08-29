@@ -1,26 +1,109 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-cream: #fff5f5;
+  --color-blush: #f7d6d0;
+  --color-rose: #e2b4bd;
+  --color-ink: #4a4a4a;
+
+  --background: var(--color-cream);
+  --foreground: var(--color-ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-cream: var(--color-cream);
+  --color-blush: var(--color-blush);
+  --color-rose: var(--color-rose);
+  --color-ink: var(--color-ink);
+  --font-sans: var(--font-patrick-hand);
+  --font-hand: var(--font-patrick-hand);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-patrick-hand), "Comic Sans MS", cursive, sans-serif;
+}
+
+/* --- Hand-drawn style utilities shared across every page --- */
+
+/* Wobbly, sketch-like border radius (each corner slightly different) */
+.sketch-border {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  border: 2.5px solid var(--color-ink);
+}
+
+.sketch-border-sm {
+  border-radius: 60px 8px 50px 8px / 8px 50px 8px 60px;
+  border: 2px solid var(--color-ink);
+}
+
+/* Offset hand-drawn "sticker" shadow instead of a soft blurred shadow */
+.sketch-shadow {
+  box-shadow: 4px 4px 0px 0px var(--color-ink);
+}
+
+.sketch-shadow-sm {
+  box-shadow: 3px 3px 0px 0px var(--color-ink);
+}
+
+/* Slight, consistent hand-placed tilt for a card/sticker feel */
+.sketch-tilt-left {
+  transform: rotate(-1.1deg);
+}
+
+.sketch-tilt-right {
+  transform: rotate(1.1deg);
+}
+
+/* Scribbly underline used for headings/links instead of a straight line */
+.sketch-underline {
+  position: relative;
+  display: inline-block;
+}
+.sketch-underline::after {
+  content: "";
+  position: absolute;
+  left: -2%;
+  right: -2%;
+  bottom: -0.15em;
+  height: 0.35em;
+  background: var(--color-rose);
+  opacity: 0.6;
+  border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+  z-index: -1;
+}
+
+/* Hand-drawn style button — flattens on press like a paper cutout */
+.sketch-btn {
+  border: 2.5px solid var(--color-ink);
+  border-radius: 60px 8px 50px 8px / 8px 50px 8px 60px;
+  box-shadow: 3px 3px 0px 0px var(--color-ink);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.sketch-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0px 0px 0px 0px var(--color-ink);
+}
+.sketch-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dashed, hand-ruled divider */
+.sketch-divider {
+  border-top: 2px dashed var(--color-ink);
+  opacity: 0.35;
+}
+
+@media (max-width: 640px) {
+  .sketch-shadow {
+    box-shadow: 3px 3px 0px 0px var(--color-ink);
+  }
+  .sketch-tilt-left,
+  .sketch-tilt-right {
+    transform: none;
+  }
 }
