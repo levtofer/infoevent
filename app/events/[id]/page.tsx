@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getEventById } from "@/lib/events";
 import { getIsAdmin } from "@/lib/auth";
 import EventDetailAdminBar from "@/components/EventDetailAdminBar";
+import EventGallery from "@/components/EventGallery";
 import { Calendar, MapPin, ArrowLeft, ExternalLink, Sparkles } from "lucide-react";
 
 export const revalidate = 0;
@@ -19,7 +20,6 @@ export default async function EventDetailPage({
     notFound();
   }
 
-  // Fallback null to empty arrays so TypeScript is happy (・w・)ゞ
   const formattedEvent = {
     ...event,
     galleryUrls: event.galleryUrls ?? [],
@@ -43,6 +43,25 @@ export default async function EventDetailPage({
       return dateStr;
     }
   };
+
+  const getEventStatus = () => {
+    const now = new Date();
+    const start = new Date(event.startDate);
+    const end = event.endDate ? new Date(event.endDate) : null;
+
+    if (end && now >= start && now <= end) {
+      return { label: "Ongoing", className: "bg-emerald-200 text-ink border-ink" };
+    }
+    if (!end && now.toDateString() === start.toDateString()) {
+      return { label: "Ongoing", className: "bg-emerald-200 text-ink border-ink" };
+    }
+    if (now < start) {
+      return { label: "Upcoming", className: "bg-blush text-ink border-ink" };
+    }
+    return { label: "Passed", className: "bg-cream text-ink/60 border-ink/40" };
+  };
+
+  const status = getEventStatus();
 
   return (
     <div className="min-h-screen bg-cream text-ink pb-16">
@@ -69,33 +88,8 @@ export default async function EventDetailPage({
       {/* Main Content Area */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
-          {/* Gallery Column */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="relative w-full h-[300px] sm:h-[450px] bg-blush/40 sketch-border sketch-shadow overflow-hidden">
-              <img
-                src={gallery[0]}
-                alt={event.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {gallery.length > 1 && (
-              <div className="grid grid-cols-4 gap-2 sm:gap-3">
-                {gallery.map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="h-16 sm:h-24 sketch-border-sm overflow-hidden"
-                  >
-                    <img
-                      src={img}
-                      alt={`Gallery ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Interactive Gallery Column */}
+          <EventGallery gallery={gallery} eventName={event.name} status={status} />
 
           {/* Metadata Column */}
           <div className="lg:col-span-5 space-y-6">
